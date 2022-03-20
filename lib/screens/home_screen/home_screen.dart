@@ -3,10 +3,13 @@ import 'package:news/modules/data.dart';
 import 'package:news/modules/open_link.dart';
 import 'package:news/modules/update_manager.dart';
 import 'package:news/modules/upgrade_messages.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:upgrader/upgrader.dart';
 
 import '../../classes/post_data.dart';
 import '../../widgets/post_widgets/post_widget.dart';
+
+RefreshController _refreshController = RefreshController(initialRefresh: false);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,9 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _update() async {
     Data.getData().then(
       (value) => setState(() {
         List<PostData> postData = [];
@@ -45,8 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return PostWidget(data: postData[index]);
           },
         );
+        _refreshController.refreshCompleted();
       }),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _update();
   }
 
   @override
@@ -57,7 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
       canDismissDialog: false,
       appcastConfig: UpdateManager.cfg,
       messages: MyUpgradeMessages(),
-      child: mainWidget,
+      child: SmartRefresher(
+        controller: _refreshController,
+        onRefresh: _update,
+        child: mainWidget,
+      ),
       onUpdate: () {
         OpenLink.open(
             "https://eviloma-ukraine-news.herokuapp.com/app/android", context);
