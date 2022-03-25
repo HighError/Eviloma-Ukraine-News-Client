@@ -59,10 +59,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
   void initState() {
     super.initState();
     _start().then((value) {
-      setState(() {
-        log = "Перехід до новин...";
-      });
-      if (value) Navigator.of(context).popAndPushNamed('/news');
+      if (value) {
+        setState(() {
+          log = "Перехід до новин...";
+        });
+        Navigator.of(context).popAndPushNamed('/news');
+      }
     });
   }
 
