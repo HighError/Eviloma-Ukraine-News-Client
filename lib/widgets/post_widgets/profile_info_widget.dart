@@ -32,7 +32,7 @@ class ProfileInfoWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(post.channel.name, style: TextStyles.h1),
-            Text(DateFormat('dd.MM.yyyy kk:mm').format(post.date)),
+            Text(DateFormat('dd.MM.yyyy HH:mm').format(post.date)),
           ],
         )
       ],
