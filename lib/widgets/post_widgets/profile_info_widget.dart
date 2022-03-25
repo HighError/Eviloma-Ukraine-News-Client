@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:news/classes/post_data.dart';
+import 'package:news/classes/post/post.dart';
 import 'package:news/modules/text_style.dart';
 import 'package:intl/intl.dart';
 
 class ProfileInfoWidget extends StatelessWidget {
-  final PostData data;
+  final Post post;
 
-  const ProfileInfoWidget({Key? key, required this.data}) : super(key: key);
+  const ProfileInfoWidget({Key? key, required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +17,12 @@ class ProfileInfoWidget extends StatelessWidget {
           alignment: Alignment.bottomRight,
           children: [
             CircleAvatar(
-              backgroundImage: data.avatarWidget,
+              backgroundImage: post.channel.avatar.image,
+              backgroundColor: Colors.transparent,
             ),
             CircleAvatar(
-              child: data.socialIconWidget,
+              backgroundImage: post.social.icon.image,
+              backgroundColor: Colors.transparent,
               radius: 10,
             ),
           ],
@@ -29,8 +31,8 @@ class ProfileInfoWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(data.username, style: TextStyles.h1),
-            Text(DateFormat('dd.MM.yyyy kk:mm').format(data.time)),
+            Text(post.channel.name, style: TextStyles.h1),
+            Text(DateFormat('dd.MM.yyyy kk:mm').format(post.date)),
           ],
         )
       ],
