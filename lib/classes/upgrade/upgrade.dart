@@ -1,7 +1,5 @@
-import 'package:package_info_plus/package_info_plus.dart';
-
 class Upgrade {
-  static String? appVersion;
+  static String appVersion = "Beta 0.1.1";
   final String version;
   final String link;
 
@@ -9,11 +7,6 @@ class Upgrade {
     required this.version,
     required this.link,
   });
-
-  static Future<void> setAppVersionOnStart() async{
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    appVersion = packageInfo.version;
-  }
 
   bool needUpgrade() {
     return version != appVersion;

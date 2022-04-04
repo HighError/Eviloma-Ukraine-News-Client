@@ -3,6 +3,7 @@ import 'package:news/classes/upgrade/upgrade.dart';
 import 'package:news/screens/channel_list_screen/channel_list_screen.dart';
 import 'package:news/screens/home_screen/home_screen.dart';
 import 'package:news/screens/loading_screen/loading_screen.dart';
+import 'package:news/widgets/drawer_item/drawer_item.dart';
 
 import 'modules/static_data.dart';
 
@@ -48,15 +49,16 @@ class _BaseScreenState extends State<BaseScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Новини"),
-        leading: GestureDetector(
-          child: const Icon(Icons.menu),
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Menu not working now. Please wait updates!")));
-          },
-        ),
       ),
       body: widget.child,
+      drawer: Drawer(
+        child: ListView(
+          children: const [
+            DrawerItem(title: "Новини", icon: Icons.newspaper, route: "/news"),
+            DrawerItem(title: "Канали", icon: Icons.people, route: "/channels"),
+          ],
+        ),
+      ),
     );
   }
 }

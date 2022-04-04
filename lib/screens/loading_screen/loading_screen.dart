@@ -16,10 +16,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
   String log = "Пошук оновлень...";
 
   Future<bool> _start() async {
-    await Upgrade.setAppVersionOnStart();
     var upgrade = await StaticData.loadUpgrades();
     if (upgrade.runtimeType == http.Response) {
-      print(upgrade.body);
       if (upgrade.statusCode != 200) {
         setState(() {
           log = "Помилка пошуку оновлень. Перезапустіть додаток!";

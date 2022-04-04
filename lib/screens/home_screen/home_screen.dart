@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:news/modules/static_data.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../widgets/post_widgets/post_widget.dart';
-
-RefreshController _refreshController = RefreshController(initialRefresh: false);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,31 +11,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final EasyRefreshController _controller = EasyRefreshController();
+
   Future<void> _update() async {
     await StaticData.loadPosts().then((value) {
       setState(() {
         if (value.statusCode == 200) {
-          _refreshController.refreshCompleted();
+          _controller.finishLoadCallBack;
         } else {
-          _refreshController.refreshFailed();
+          _controller.resetRefreshStateCallBack;
         }
       });
     });
   }
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      controller: _refreshController,
-      onRefresh: _update,
-      //child: mainWidget,
-      child: SizedBox(
-        width: double.infinity,
+    return SizedBox(
+      width: double.infinity,
+      child: EasyRefresh(
+        header: MaterialHeader(),
+        controller: _controller,
         child: ListView.builder(
           itemCount: StaticData.posts.length,
           itemBuilder: (context, index) {
             return PostWidget(post: StaticData.posts[index]);
           },
         ),
+        onRefresh: _update,
       ),
     );
   }

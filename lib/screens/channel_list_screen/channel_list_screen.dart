@@ -1,61 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:news/classes/channel/channel.dart';
+import 'package:news/modules/static_data.dart';
+import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
 
 import '../../classes/social/social.dart';
 
 class ChannelListScreen extends StatelessWidget {
   const ChannelListScreen({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    Social telegram = Social.fromJson({"name": "telegram"});
-
-    return CustomScrollView(
-      slivers: [
-        SliverStickyHeader(
-          header: const _Header(title: "Telegram"),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-              ],
+  List<Widget> getChannels() {
+    List<Widget> widgets = [];
+    if (StaticData.socials.isNotEmpty) {
+      for (var item in StaticData.socials) {
+        List<Channel> channels = StaticData.channels
+            .where((element) => element.social == item)
+            .toList();
+        widgets.add(
+          SliverStickyHeader.builder(
+            builder: (_, state) => Container(
+              height: 60,
+              color: Colors.lightBlue.withOpacity(1.0 - state.scrollPercentage),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: Text(toBeginningOfSentenceCase(item.name) ?? ""),
+            ),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (_, index) => ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: channels[index].avatar.image,
+                    backgroundColor: Colors.transparent,
+                  ),
+                  title: Text(channels[index].name),
+                ),
+                childCount: channels.length,
+              ),
             ),
           ),
-        ),
-        SliverStickyHeader(
-          header: const _Header(title: "Twitter"),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate(
-              [
-
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+        );
+      }
+    }
+    return widgets;
   }
-}
-
-class _Header extends StatelessWidget {
-  final String title;
-
-  const _Header({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 75,
-      color: Colors.blue,
-      child: Center(
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontFamily: "Raleway",
-            fontWeight: FontWeight.bold,
-            fontSize: 25,
-          ),
-        ),
-      ),
-    );
+    return CustomScrollView(slivers: getChannels());
   }
 }

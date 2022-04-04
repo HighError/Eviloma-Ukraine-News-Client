@@ -23,7 +23,10 @@ class PostWidget extends StatelessWidget {
                 padding: EdgeInsets.only(top: 10, bottom: 5),
                 child: Divider(color: Colors.white),
               ),
-              Text(post.message),
+              SizedBox(
+                width: double.infinity,
+                child: Text(post.message),
+              ),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,

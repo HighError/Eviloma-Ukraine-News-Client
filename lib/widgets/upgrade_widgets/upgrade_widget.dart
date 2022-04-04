@@ -60,7 +60,7 @@ class _UpgradeWidgetState extends State<UpgradeWidget> {
               message: "Завантаження оновлення...",
               showProgress: true,
               color: Colors.green,
-              progress: (total / sent),
+              progress: (sent / total),
             );
           },
         );
