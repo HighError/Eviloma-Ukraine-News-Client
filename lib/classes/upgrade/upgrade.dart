@@ -1,5 +1,5 @@
 class Upgrade {
-  static String appVersion = "Beta 0.1.1";
+  static String appVersion = "Beta 0.1.2";
   final String version;
   final String link;
 

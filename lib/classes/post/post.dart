@@ -5,7 +5,7 @@ import 'package:news/modules/static_data.dart';
 class Post {
   final Social social;
   final Channel channel;
-  final int id;
+  final String id;
   final String message;
   final DateTime date;
   final String url;
@@ -25,14 +25,14 @@ class Post {
     );
 
     final channel = StaticData.channels.firstWhere(
-      (element) => element.channelId == json["channel_id"],
+      (element) => element.channelId == (json["channel_id"]).toString(),
       orElse: () => StaticData.baseChannel,
     );
 
     return Post(
       social: social,
       channel: channel,
-      id: json["message_id"],
+      id: json["message_id"].toString(),
       message: json["message"],
       date: DateTime.parse(json["date"]["\$date"]).toLocal(),
       url: json["url"],
