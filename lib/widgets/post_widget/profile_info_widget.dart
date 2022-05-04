@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news/classes/post/post.dart';
+import 'package:news/classes/post.dart';
+import 'package:news/modules/open_link.dart';
 import 'package:news/modules/text_style.dart';
 import 'package:intl/intl.dart';
 
@@ -34,7 +35,7 @@ class ProfileInfoWidget extends StatelessWidget {
             Text(post.channel.name, style: TextStyles.h1),
             Text(DateFormat('dd.MM.yyyy HH:mm').format(post.date)),
           ],
-        )
+        ),
       ],
     );
   }

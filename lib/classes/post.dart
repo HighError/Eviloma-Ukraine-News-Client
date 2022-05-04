@@ -1,5 +1,6 @@
-import 'package:news/classes/channel/channel.dart';
-import 'package:news/classes/social/social.dart';
+import 'package:flutter/material.dart';
+import 'package:news/classes/channel.dart';
+import 'package:news/classes/social.dart';
 import 'package:news/modules/static_data.dart';
 
 class Post {
@@ -8,7 +9,8 @@ class Post {
   final String id;
   final String message;
   final DateTime date;
-  final String url;
+  final String link;
+  final List<Image> images;
 
   Post(
       {required this.social,
@@ -16,7 +18,8 @@ class Post {
       required this.id,
       required this.message,
       required this.date,
-      required this.url});
+      required this.link,
+      required this.images});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     final social = StaticData.socials.firstWhere(
@@ -25,9 +28,22 @@ class Post {
     );
 
     final channel = StaticData.channels.firstWhere(
-      (element) => element.channelId == (json["channel_id"]).toString(),
+      (element) => element.id == (json["channel_id"]).toString(),
       orElse: () => StaticData.baseChannel,
     );
+
+    List<Image> images = [];
+
+    if (json.containsKey("images")) {
+      if (json["images"] is List<dynamic>) {
+        List<dynamic> _links = json["images"];
+        if (_links.isNotEmpty) {
+          for (var link in _links) {
+            images.add(Image.network(link.toString()));
+          }
+        }
+      }
+    }
 
     return Post(
       social: social,
@@ -35,7 +51,8 @@ class Post {
       id: json["message_id"].toString(),
       message: json["message"],
       date: DateTime.parse(json["date"]["\$date"]).toLocal(),
-      url: json["url"],
+      link: json["url"],
+      images: images,
     );
   }
 }
